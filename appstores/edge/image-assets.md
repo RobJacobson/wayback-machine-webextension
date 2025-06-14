@@ -1,5 +1,4 @@
-Image Assets - Microsoft Edge Store
------------------------------------
+## Image Assets - Microsoft Edge Store
 
 ### Extension Store Logo (icon)
 
@@ -27,4 +26,3 @@ Image Assets - Microsoft Edge Store
 - Turn on embedding.
 - To submit:
   - On YouTube select Share > Embed and copy/paste the HTML.
-

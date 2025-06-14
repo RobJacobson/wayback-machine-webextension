@@ -19,101 +19,112 @@
 /*   global getWBMSummary */
 
 function get_tagCloud() {
-  const url = getUrlByParameter('url')
-  getTags(url)
+  const url = getUrlByParameter("url");
+  getTags(url);
 }
 
 function get_hypothesis() {
-  let hypo_domain = getAnnotations('domain')
-  let hypo_url = getAnnotations('url')
-  $('#loader_annotations').hide()
+  let hypo_domain = getAnnotations("domain");
+  let hypo_url = getAnnotations("url");
+  $("#loader_annotations").hide();
   if (hypo_url && hypo_domain) {
-    $('#annotations_status').show()
+    $("#annotations_status").show();
   }
 }
 
 function openContextFeature(evt, feature) {
   // Get all elements with class="tabcontent" and hide them
-  $('.tabcontent').hide()
+  $(".tabcontent").hide();
   // Get all button elements inside elements with class="col-tablinks" and remove the class "active"
-  $('.col-tablinks button').removeClass('active')
+  $(".col-tablinks button").removeClass("active");
   // Show the current tab, and add an "active" class to the button that opened the tab
-  $(feature).show()
-  evt.currentTarget.children[0].className += ' active'
+  $(feature).show();
+  evt.currentTarget.children[0].className += " active";
 }
 
 function singlePageView() {
   const contexts_dic = {
-    'alexa': getAlexa,
-    'domaintools': getDomainTool,
-    'wbmsummary': getWBMSummary,
-    'annotations': get_hypothesis,
-    'tagcloud': get_tagCloud
-  }
+    alexa: getAlexa,
+    domaintools: getDomainTool,
+    wbmsummary: getWBMSummary,
+    annotations: get_hypothesis,
+    tagcloud: get_tagCloud,
+  };
 
   // Check settings for features
-  let features = ['alexa', 'domaintools', 'wbmsummary', 'annotations', 'tagcloud']
+  let features = [
+    "alexa",
+    "domaintools",
+    "wbmsummary",
+    "annotations",
+    "tagcloud",
+  ];
   chrome.storage.local.get(features, (items) => {
-    chrome.storage.local.get(['selectedFeature'], (settings) => {
-      let openedFeature = (settings) ? settings.selectedFeature : null
-      let clickFeature = null
-      let countFeature = 0
-      let lastFeatureTab = null
+    chrome.storage.local.get(["selectedFeature"], (settings) => {
+      let openedFeature = settings ? settings.selectedFeature : null;
+      let clickFeature = null;
+      let countFeature = 0;
+      let lastFeatureTab = null;
       for (let i = 0; i < features.length; i++) {
-        let feature = features[i]
-        let featureId = '#' + feature.charAt(0).toUpperCase() + feature.substring(1)
-        let featureTabId = featureId + '_tab'
+        let feature = features[i];
+        let featureId =
+          "#" + feature.charAt(0).toUpperCase() + feature.substring(1);
+        let featureTabId = featureId + "_tab";
 
         if (items && items[feature]) {
-          countFeature++
-          lastFeatureTab = featureTabId
+          countFeature++;
+          lastFeatureTab = featureTabId;
           // Show sidebar menu
-          $('#side-nav-bar').show()
+          $("#side-nav-bar").show();
           // Show selected features in menu
-          $(featureTabId).show()
-          contexts_dic[feature]()
+          $(featureTabId).show();
+          contexts_dic[feature]();
           $(featureTabId).click((event) => {
             // When clicked on a context tab, open that tab and set that tab as selectedFeature
-            openContextFeature(event, featureId)
-            let selectedFeature = featureTabId
-            chrome.storage.local.set({ selectedFeature }, () => {
-            })
-          })
+            openContextFeature(event, featureId);
+            let selectedFeature = featureTabId;
+            chrome.storage.local.set({ selectedFeature }, () => {});
+          });
           // Get first tab
           if (!clickFeature) {
-            clickFeature = featureTabId
+            clickFeature = featureTabId;
             // Set border for the first tab
-            $(clickFeature).children(0).css({ 'border-radius': '5px 5px 0 0' })
+            $(clickFeature).children(0).css({ "border-radius": "5px 5px 0 0" });
           }
           // Open the selected tab if it is there
           if (openedFeature) {
             // Open the first tab if last selected tab is hidden now
             if (openedFeature !== featureTabId) {
-              $(clickFeature).click()
+              $(clickFeature).click();
             } else {
               // Open the previously selected tab
-              clickFeature = openedFeature
-              $(clickFeature).click()
+              clickFeature = openedFeature;
+              $(clickFeature).click();
             }
           } else {
             // Open first tab if user is accesing Contexts Page for the first time
-            $(clickFeature).click()
+            $(clickFeature).click();
           }
         }
       }
       // Set border for the last tab
-      $(lastFeatureTab).children(0).css({ 'border-bottom-left-radius': '5px', 'border-bottom-right-radius': '5px' })
+      $(lastFeatureTab)
+        .children(0)
+        .css({
+          "border-bottom-left-radius": "5px",
+          "border-bottom-right-radius": "5px",
+        });
       // Show error message if no context is selected
       if (countFeature <= 0) {
-        $('#error-message').show()
+        $("#error-message").show();
       }
-    })
-  })
+    });
+  });
 }
 
 // onload
-$(function() {
-  const url = getUrlByParameter('url')
-  $('.url').text(url).attr('href', url)
-  singlePageView()
-})
+$(function () {
+  const url = getUrlByParameter("url");
+  $(".url").text(url).attr("href", url);
+  singlePageView();
+});

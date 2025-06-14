@@ -39,20 +39,22 @@
     "https://hypothes.is/*",
     "<all_urls>"
   ],
-  "optional_permissions": [
-    "bookmarks"
-  ],
+  "optional_permissions": ["bookmarks"],
   "background": {
     "scripts": ["scripts/background.js", "scripts/utils.js"],
     "service_worker": "scripts/background.js"
   },
-  "content_scripts": [{
-    "matches": ["http://*.wikipedia.org/*", "https://*.wikipedia.org/*"],
-    "js": ["scripts/wikipedia.js"],
-    "css": ["css/wikipedia.css"]
-  }],
-  "web_accessible_resources": [{
-    "resources": ["/css/archive.css", "/images/*"],
-    "matches": ["<all_urls>"]
-  }]
+  "content_scripts": [
+    {
+      "matches": ["http://*.wikipedia.org/*", "https://*.wikipedia.org/*"],
+      "js": ["scripts/wikipedia.js"],
+      "css": ["css/wikipedia.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["/css/archive.css", "/images/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

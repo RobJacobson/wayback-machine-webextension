@@ -6,7 +6,6 @@
 - Store ID: fpnmgdkabkmnadcjpehmlllkndpkmiak
 - Store URL: https://chrome.google.com/webstore/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak
 
-
 ### Notes
 
 - [Updated Privacy Policy &amp; Secure Handling Requirements](https://developer.chrome.com/docs/webstore/user_data/)
@@ -17,21 +16,22 @@
 
 - [Authentication Tools for Secure Sign In](https://safety.google/authentication/) - Info about 2FA.
 
-
 ### Create Package
 
 - Create a .ZIP file of the `webextension` directory. It must not include the directory name, and should not contain any `.DS_Store` or other hidden files, nor any hidden `__MACOSX/` directories which the Finder compress tool usually includes.
 - If on a mac, run the following using Terminal, from within the `webextension` directory:
+
 ```
 zip -r webext.zip . -x ".*" -x "*/.*"
 ```
+
 - Then move ZIP file to another location on your computer outside of this repo.
 - Verify that ZIP file is formatted correctly by testing in Chrome.
-
 
 ### Login to Account
 
 - [Sign in to Google](https://accounts.google.com/)
+
   - Use standard app email account and password.
   - This will send a verification code SMS to number listed, who you will need to ask for the code.
 
@@ -42,7 +42,6 @@ zip -r webext.zip . -x ".*" -x "*/.*"
 - Next select the item "Wayback Machine" (latest version)
 
 - Then select "Package" along the left sidebar, then "Upload new package" button and upload the ZIP file.
-
 
 ### Store Listing
 
@@ -66,7 +65,6 @@ zip -r webext.zip . -x ".*" -x "*/.*"
 - Official URL: (blank)
 - Homepage URL: https://archive.org
 - Support URL: https://archive.org/about/contact.php
-
 
 ### Privacy practices
 
@@ -106,6 +104,7 @@ Permissions used: `activeTab, bookmarks, cookies, contextMenus, notifications, s
 - [x] Website content (When scanning for ISBNs on Wikipedia and Amazon pages.)
 
 Certify:
+
 - [x] I do not sell or transfer user date to third parties.
 - [x] I do not use or transfer user data for purposes that are unrelated to my item's single purpose.
 - [x] I do not use or transfer user data to determine creditworthiness or for lending purposes.
@@ -116,7 +115,6 @@ Certify:
 - Visibility: Public
 - Percentage rollout: 100%
 - Distribution: All Regions
-
 
 ### Images
 

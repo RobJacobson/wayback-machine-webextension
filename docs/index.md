@@ -1,11 +1,10 @@
 # Wayback Machine Web Browser Extension
 
-Welcome to the Official Internet Archive Wayback Machine Browser Extension! Go back in time to see how a website has changed through the history of the Web. Save websites, view missing *404 Not Found* pages, or read archived books & papers.
+Welcome to the Official Internet Archive Wayback Machine Browser Extension! Go back in time to see how a website has changed through the history of the Web. Save websites, view missing _404 Not Found_ pages, or read archived books & papers.
 
 Most features work without requiring an account, but if you do create an account, you'll be able to archive any website easily with just a single tap of a button.
 
-Some features must be enabled from Settings. Select *Private Mode* to prevent automatic sending of data.
-
+Some features must be enabled from Settings. Select _Private Mode_ to prevent automatic sending of data.
 
 **Features**
 
@@ -26,6 +25,5 @@ Some features must be enabled from Settings. Select *Private Mode* to prevent au
 • **Annotations** - Provide a list of annotations for the current web page and domain, provided by Hypothes.is.
 
 • **Tweets & Share Links** - Search Twitter for information regarding your current page, or share archived links on social media.
-
 
 For support, please email info@archive.org

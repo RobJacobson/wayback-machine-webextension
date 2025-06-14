@@ -71,7 +71,10 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.wm1996-tooltip a, .wm1996-tooltip-body a, .wm1996-tooltip a:hover, .wm1996-tooltip-body a:hover {
+.wm1996-tooltip a,
+.wm1996-tooltip-body a,
+.wm1996-tooltip a:hover,
+.wm1996-tooltip-body a:hover {
   text-decoration: none;
 }
 
@@ -86,12 +89,16 @@
   border-radius: 10px;
   background: #333;
   color: #fff;
-  animation:  wm1996-fadeInFrames ease 0.3s;
+  animation: wm1996-fadeInFrames ease 0.3s;
 }
 
 @keyframes wm1996-fadeInFrames {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* Buttons */
@@ -124,5 +131,5 @@
 }
 
 .wm1996-btn-blue:hover {
-  background-color: #51708E !important;
+  background-color: #51708e !important;
 }

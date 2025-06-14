@@ -1,8 +1,8 @@
 ## What's New - Version History
 
-*All Browsers*
+_All Browsers_
 
-### 3.4.2 ###
+### 3.4.2
 
 What's New in v3.4.2
 
@@ -10,20 +10,17 @@ We did a bit of internal code changes for upgrading to Manifest v3 (which just m
 
 Fixed a bug saving Exclude URLs and updated some website links that changed.
 
-
-### 3.3.1 (Edge) ###
+### 3.3.1 (Edge)
 
 Inform if cookies are turned off when logging in
 
-
-### 3.3 (Safari) ###
+### 3.3 (Safari)
 
 New version of context API integration
 False 404 Popup bug fix
 Updating all the outdated dependancies
 
-
-### 3.2 ###
+### 3.2
 
 What's New in v3.2
 
@@ -33,8 +30,7 @@ We've fixed some bugs: Stay logged in after clearing cookies, prevent Auto Save 
 
 Additional tweaks: Added third option to Show Features setting, hide the count badge while saving, improved keyboard accessibility, and "Show Context" takes you directly to the relevant context.
 
-
-### 3.2 (Safari) ###
+### 3.2 (Safari)
 
 What's New in v3.2
 
@@ -42,8 +38,7 @@ In this version, we've fixed some bugs: Stay logged in after clearing cookies, p
 
 Additional tweaks: Added third option to Show Features setting, hide the count badge while saving, and "Show Context" takes you directly to the relevant context.
 
-
-### 3.1 ###
+### 3.1
 
 What's New in v3.1
 
@@ -55,12 +50,10 @@ This version introduces the new "Contextual Notices" feature which checks for co
 
 We've added two new buttons "URLs" & "Collections", tweaked some things, and fixed about a dozen bugs!
 
-
-### 3.0 ###
+### 3.0
 
 We've completely redone the official Wayback Machine web browser extension. Bugs have been fixed, and new features added, with a brand new design!
 
 Featuring:
 
 Save Page Now • Auto Save Page • Log-in • Oldest & Newest Pages • Improved "404 Not Found" Popups • Wayback Machine Count • Cited Books & Papers on Wikipedia • Amazon Books • TV News Clips • Site Map • Word Cloud • My Web Archive • Annotations • Search Tweets • Share Links • Private Mode.
-

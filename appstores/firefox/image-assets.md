@@ -1,5 +1,4 @@
-Screenshots & Promo Images for Firefox Store
---------------------------------------------
+## Screenshots & Promo Images for Firefox Store
 
 ### Screenshots
 

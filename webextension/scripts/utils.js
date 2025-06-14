@@ -5,134 +5,157 @@
 
 // default exclude list for auto-save
 const defaultAutoExcludeList = [
-  'archive.org*',
-  'web.archive.org*',
-  'google.com*',
-  '*.google.com*',
-  'mail.yahoo.com*',
-  'duckduckgo.com/?q=*',
-  '*.proton.me*'
-]
+  "archive.org*",
+  "web.archive.org*",
+  "google.com*",
+  "*.google.com*",
+  "mail.yahoo.com*",
+  "duckduckgo.com/?q=*",
+  "*.proton.me*",
+];
 
 // list of excluded URLs
 const excluded_urls = [
-  '127.0.0.1',
-  'localhost',
-  '0.0.0.0',
-  'chrome:',
-  'chrome-extension:',
-  'about:',
-  'moz-extension:',
-  '192.168.',
-  '10.',
-  'file:',
-  'edge:',
-  'extension:',
-  'safari-web-extension:',
-  'chrome-error:'
-]
+  "127.0.0.1",
+  "localhost",
+  "0.0.0.0",
+  "chrome:",
+  "chrome-extension:",
+  "about:",
+  "moz-extension:",
+  "192.168.",
+  "10.",
+  "file:",
+  "edge:",
+  "extension:",
+  "safari-web-extension:",
+  "chrome-error:",
+];
 
 const newshosts = new Set([
-  'apnews.com',
-  'www.factcheck.org',
-  'www.forbes.com',
-  'www.huffpost.com',
-  'www.nytimes.com',
-  'www.politico.com',
-  'www.politifact.com',
-  'www.snopes.com',
-  'www.theverge.com',
-  'www.usatoday.com',
-  'www.vox.com',
-  'www.washingtonpost.com',
-  'edition.cnn.com'
-])
+  "apnews.com",
+  "www.factcheck.org",
+  "www.forbes.com",
+  "www.huffpost.com",
+  "www.nytimes.com",
+  "www.politico.com",
+  "www.politifact.com",
+  "www.snopes.com",
+  "www.theverge.com",
+  "www.usatoday.com",
+  "www.vox.com",
+  "www.washingtonpost.com",
+  "edition.cnn.com",
+]);
 
-let isArray = (a) => (!!a) && (a.constructor === Array)
-let isObject = (a) => (!!a) && (a.constructor === Object)
+let isArray = (a) => !!a && a.constructor === Array;
+let isObject = (a) => !!a && a.constructor === Object;
 
 // Use this instead of encodeURIComponent()
 function fixedEncodeURIComponent(str) {
-  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-    return '%' + c.charCodeAt(0).toString(16)
-  })
+  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+    return "%" + c.charCodeAt(0).toString(16);
+  });
 }
 
 /* * * Browser Detection * * */
 
 function getBrowser() {
   // the order of these is important!
-  if (navigator.brave) { return 'brave' }
-  else if (navigator.userAgent.indexOf('Edg') !== -1) { return 'edge' }
-  else if (navigator.userAgent.indexOf('OPR') !== -1) { return 'opera' }
-  else if (navigator.userAgent.indexOf('Firefox') !== -1) { return 'firefox' }
-  else if (navigator.userAgent.indexOf('Chromium') !== -1) { return 'chromium' }
-  else if (navigator.userAgent.indexOf('Chrome') !== -1) { return 'chrome' }
-  else if (navigator.userAgent.indexOf('Safari') !== -1) { return 'safari' }
-  else if ((navigator.userAgent.indexOf('Trident') !== -1) || (navigator.userAgent.indexOf('MSIE'))) { return 'ie' }
-  else { return '' }
+  if (navigator.brave) {
+    return "brave";
+  } else if (navigator.userAgent.indexOf("Edg") !== -1) {
+    return "edge";
+  } else if (navigator.userAgent.indexOf("OPR") !== -1) {
+    return "opera";
+  } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+    return "firefox";
+  } else if (navigator.userAgent.indexOf("Chromium") !== -1) {
+    return "chromium";
+  } else if (navigator.userAgent.indexOf("Chrome") !== -1) {
+    return "chrome";
+  } else if (navigator.userAgent.indexOf("Safari") !== -1) {
+    return "safari";
+  } else if (
+    navigator.userAgent.indexOf("Trident") !== -1 ||
+    navigator.userAgent.indexOf("MSIE")
+  ) {
+    return "ie";
+  } else {
+    return "";
+  }
 }
 
 const hostURLs = {
-  chrome: 'https://chrome-api.archive.org/',
-  chromium: 'https://chrome-api.archive.org/',
-  firefox: 'https://firefox-api.archive.org/',
-  safari: 'https://safari-api.archive.org/',
-  brave: 'https://brave-api.archive.org/',
-  edge: 'https://edge-api.archive.org/',
-  ie: 'https://edge-api.archive.org/',
-  opera: 'https://opera-api.archive.org/'
-}
+  chrome: "https://chrome-api.archive.org/",
+  chromium: "https://chrome-api.archive.org/",
+  firefox: "https://firefox-api.archive.org/",
+  safari: "https://safari-api.archive.org/",
+  brave: "https://brave-api.archive.org/",
+  edge: "https://edge-api.archive.org/",
+  ie: "https://edge-api.archive.org/",
+  opera: "https://opera-api.archive.org/",
+};
 
 const feedbackURLs = {
-  chrome: 'https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews',
-  chromium: 'https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews',
-  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/',
-  safari: 'https://apps.apple.com/us/app/wayback-machine/id1472432422',
-  brave: 'https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews',
-  edge: 'https://microsoftedge.microsoft.com/addons/detail/wayback-machine/kjmickeoogghaimmomagaghnogelpcpn',
-  opera: 'https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews'
-}
+  chrome:
+    "https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews",
+  chromium:
+    "https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews",
+  firefox:
+    "https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/",
+  safari: "https://apps.apple.com/us/app/wayback-machine/id1472432422",
+  brave:
+    "https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews",
+  edge: "https://microsoftedge.microsoft.com/addons/detail/wayback-machine/kjmickeoogghaimmomagaghnogelpcpn",
+  opera:
+    "https://chromewebstore.google.com/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak/reviews",
+};
 
-const gBrowser = getBrowser()
-const isChrome = (gBrowser === 'chrome') || (gBrowser === 'chromium')
-const isFirefox = (gBrowser === 'firefox')
-const isEdge = (gBrowser === 'edge')
-const isSafari = (gBrowser === 'safari')
+const gBrowser = getBrowser();
+const isChrome = gBrowser === "chrome" || gBrowser === "chromium";
+const isFirefox = gBrowser === "firefox";
+const isEdge = gBrowser === "edge";
+const isSafari = gBrowser === "safari";
 
-const hostURL = hostURLs[gBrowser] || hostURLs['chrome']
-const feedbackURL = feedbackURLs[gBrowser] || '#'
+const hostURL = hostURLs[gBrowser] || hostURLs["chrome"];
+const feedbackURL = feedbackURLs[gBrowser] || "#";
 
-let gVersion = ''
+let gVersion = "";
 function getManifestVersion() {
-  let ver = ''
-  const manifest = chrome.runtime.getManifest()
+  let ver = "";
+  const manifest = chrome.runtime.getManifest();
   if (manifest) {
-    ver = manifest.version
+    ver = manifest.version;
   }
-  return ver
+  return ver;
 }
 
-let gCustomUserAgent = ''
+let gCustomUserAgent = "";
 function getCustomUserAgent() {
-  let uAgent = ''
-  const manifest = chrome.runtime.getManifest()
+  let uAgent = "";
+  const manifest = chrome.runtime.getManifest();
   if (manifest) {
-    uAgent = 'Wayback_Machine_' + gBrowser.charAt(0).toUpperCase() + gBrowser.slice(1) + '/' + manifest.version
+    uAgent =
+      "Wayback_Machine_" +
+      gBrowser.charAt(0).toUpperCase() +
+      gBrowser.slice(1) +
+      "/" +
+      manifest.version;
   }
-  return uAgent
+  return uAgent;
 }
 
 let hostHeaders = new Headers({
-  'Accept': 'application/json'
-})
+  Accept: "application/json",
+});
 
 // will not run during mocha testing
-if (typeof isInTestEnv === 'undefined') {
-  gVersion = getManifestVersion()
-  gCustomUserAgent = getCustomUserAgent()
+if (typeof isInTestEnv === "undefined") {
+  gVersion = getManifestVersion();
+  gCustomUserAgent = getCustomUserAgent();
   // Chrome ignores this being set. Works in Firefox & Safari.
-  hostHeaders.set('User-Agent', navigator.userAgent + ' ' + gCustomUserAgent)
+  hostHeaders.set("User-Agent", navigator.userAgent + " " + gCustomUserAgent);
 }
 
 /* * * Archive APIs * * */
@@ -145,29 +168,28 @@ if (typeof isInTestEnv === 'undefined') {
 function getUserInfo() {
   const apiPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(new Error('timeout'))
-    }, 5000)
-    let headers = new Headers(hostHeaders)
-    headers.set('Content-Type', 'application/json')
-    fetch('https://archive.org/services/user.php?op=whoami', {
-      method: 'GET',
-      headers: headers
-    })
-    .then(resolve, reject)
-  })
+      reject(new Error("timeout"));
+    }, 5000);
+    let headers = new Headers(hostHeaders);
+    headers.set("Content-Type", "application/json");
+    fetch("https://archive.org/services/user.php?op=whoami", {
+      method: "GET",
+      headers: headers,
+    }).then(resolve, reject);
+  });
   return apiPromise
-  .then(response => response.json())
-  .then((res) => {
-    if (res && res.success && ('value' in res)) {
-      // success
-      return res.value
-    } else {
-      console.log('getUserInfo failed')
-    }
-  })
-  .catch((e) => {
-    console.log('getUserInfo ERROR: ', e)
-  })
+    .then((response) => response.json())
+    .then((res) => {
+      if (res && res.success && "value" in res) {
+        // success
+        return res.value;
+      } else {
+        console.log("getUserInfo failed");
+      }
+    })
+    .catch((e) => {
+      console.log("getUserInfo ERROR: ", e);
+    });
 }
 
 /**
@@ -176,43 +198,79 @@ function getUserInfo() {
  * @param callback(result) : returns object { auth_check: bool } where auth_check == true if logged in, false if not.
  */
 function checkAuthentication(acallback) {
-  chrome.cookies.getAll({ url: 'https://archive.org' }, (cookies) => {
-    let loggedIn = false, ia_auth = false
-    cookies && cookies.forEach(cookie => {
-      if ((cookie.name === 'logged-in-sig') && cookie.value && (cookie.value.length > 0)) { loggedIn = true }
-      else if ((cookie.name === 'ia-auth') && cookie.value && (cookie.value.length > 0)) { ia_auth = true }
-    })
+  chrome.cookies.getAll({ url: "https://archive.org" }, (cookies) => {
+    let loggedIn = false,
+      ia_auth = false;
+    cookies &&
+      cookies.forEach((cookie) => {
+        if (
+          cookie.name === "logged-in-sig" &&
+          cookie.value &&
+          cookie.value.length > 0
+        ) {
+          loggedIn = true;
+        } else if (
+          cookie.name === "ia-auth" &&
+          cookie.value &&
+          cookie.value.length > 0
+        ) {
+          ia_auth = true;
+        }
+      });
     if (loggedIn) {
       // store auth cookies in storage
-      chrome.storage.local.set({ auth_cookies: cookies })
-      acallback({ 'auth_check': true })
+      chrome.storage.local.set({ auth_cookies: cookies });
+      acallback({ auth_check: true });
     } else {
       // if cookies not set but found in storage, then restore cookies from storage,
       // but if user previously logged out of archive.org on the web (ia_auth == true), then don't restore cookies from storage.
-      chrome.storage.local.get(['auth_cookies'], (items) => {
+      chrome.storage.local.get(["auth_cookies"], (items) => {
         if (items.auth_cookies && !ia_auth) {
-          items.auth_cookies.forEach(authCookie => {
+          items.auth_cookies.forEach((authCookie) => {
             // set only a subset of keys to avoid TypeErrors
             const newCookie = Object.fromEntries(
-              ['domain', 'expirationDate', 'httpOnly', 'name', 'path', 'sameSite', 'secure', 'storeId', 'url', 'value']
-              .filter(k => k in authCookie).map(k => [k, authCookie[k]])
-            )
-            newCookie.url = 'https://archive.org'
-            chrome.cookies.set(newCookie)
-            if ((authCookie.name === 'logged-in-sig') && authCookie.value && (authCookie.value.length > 0)) { loggedIn = true }
-          })
+              [
+                "domain",
+                "expirationDate",
+                "httpOnly",
+                "name",
+                "path",
+                "sameSite",
+                "secure",
+                "storeId",
+                "url",
+                "value",
+              ]
+                .filter((k) => k in authCookie)
+                .map((k) => [k, authCookie[k]]),
+            );
+            newCookie.url = "https://archive.org";
+            chrome.cookies.set(newCookie);
+            if (
+              authCookie.name === "logged-in-sig" &&
+              authCookie.value &&
+              authCookie.value.length > 0
+            ) {
+              loggedIn = true;
+            }
+          });
         }
-        acallback({ 'auth_check': loggedIn })
-      })
+        acallback({ auth_check: loggedIn });
+      });
     }
-  })
+  });
 }
 
 /* * * Storage functions * * */
 
 // Returns a string key from a Tab windowId and tab id, and maybe a slice of URL.
 function getTabKey(atab) {
-  return (atab) ? '' + (('windowId' in atab) ? atab.windowId : '') + 'i' + (('id' in atab) ? atab.id : '') : ''
+  return atab
+    ? "" +
+        ("windowId" in atab ? atab.windowId : "") +
+        "i" +
+        ("id" in atab ? atab.id : "")
+    : "";
 }
 
 /**
@@ -222,14 +280,18 @@ function getTabKey(atab) {
  * @return Promise
  */
 async function saveTabData(atab, data) {
-  if (!(atab && ('id' in atab) && ('windowId' in atab))) { return }
-  let key = 'tab_' + getTabKey(atab)
+  if (!(atab && "id" in atab && "windowId" in atab)) {
+    return;
+  }
+  let key = "tab_" + getTabKey(atab);
   // take exisiting data in storage and overwrite with new data
   let result = await chrome.storage.session.get(key);
-  let exdata = result[key] || {}
-  for (let [k, v] of Object.entries(data)) { exdata[k] = v }
-  let obj = {}
-  obj[key] = exdata
+  let exdata = result[key] || {};
+  for (let [k, v] of Object.entries(data)) {
+    exdata[k] = v;
+  }
+  let obj = {};
+  obj[key] = exdata;
   return chrome.storage.session.set(obj);
 }
 
@@ -240,19 +302,24 @@ async function saveTabData(atab, data) {
  * @return Promise
  */
 async function clearTabData(atab, keylist) {
-  if (!(atab && ('id' in atab) && ('windowId' in atab))) { return }
-  let key = 'tab_' + getTabKey(atab)
+  if (!(atab && "id" in atab && "windowId" in atab)) {
+    return;
+  }
+  let key = "tab_" + getTabKey(atab);
   // take exisiting data in storage and delete any items from keylist
   let result = await chrome.storage.session.get(key);
-  let exdata = result[key] || {}
+  let exdata = result[key] || {};
   let count = 0;
   for (let k of keylist) {
-    if (k in exdata) { delete exdata[k]; count += 1; }
+    if (k in exdata) {
+      delete exdata[k];
+      count += 1;
+    }
   }
   if (count > 0) {
     // Only save to storage if changes occurred
-    let obj = {}
-    obj[key] = exdata
+    let obj = {};
+    obj[key] = exdata;
     return chrome.storage.session.set(obj);
   }
 }
@@ -263,8 +330,10 @@ async function clearTabData(atab, keylist) {
  * @return Promise data is an object of key:value pairs stored for given tab, or data is undefined.
  */
 async function readTabData(atab) {
-  if (!(atab && ('id' in atab) && ('windowId' in atab))) { return }
-  const key = 'tab_' + getTabKey(atab)
+  if (!(atab && "id" in atab && "windowId" in atab)) {
+    return;
+  }
+  const key = "tab_" + getTabKey(atab);
   const result = await chrome.storage.session.get(key);
   return result[key];
 }
@@ -278,7 +347,7 @@ async function readTabData(atab) {
  * Return true if version has 4 numbers, which means it's a development build not for release.
  */
 function isDevVersion() {
-  return (gVersion && (gVersion.split('.').length === 4))
+  return gVersion && gVersion.split(".").length === 4;
 }
 
 /**
@@ -286,8 +355,13 @@ function isDevVersion() {
  */
 function isBadgeOnTop() {
   // TODO: check other browsers
-  const badgeOnTop = { firefox: true, safari: true, chrome: false, edge: false }
-  return badgeOnTop[gBrowser]
+  const badgeOnTop = {
+    firefox: true,
+    safari: true,
+    chrome: false,
+    edge: false,
+  };
+  return badgeOnTop[gBrowser];
 }
 
 /* * * Wayback functions * * */
@@ -299,17 +373,17 @@ function isBadgeOnTop() {
  * @return {string}
  */
 function badgeCountText(count) {
-  let text = ''
+  let text = "";
   if (count < 1000) {
-    text = count.toLocaleString()
+    text = count.toLocaleString();
   } else if (count < 10000) {
-    text = (Math.round(count / 100) / 10.0).toLocaleString() + 'K'
+    text = (Math.round(count / 100) / 10.0).toLocaleString() + "K";
   } else if (count < 1000000) {
-    text = Math.round(count / 1000).toLocaleString() + 'K'
+    text = Math.round(count / 1000).toLocaleString() + "K";
   } else if (count >= 1000000) {
-    text = Math.round(count / 1000000).toLocaleString() + 'M'
+    text = Math.round(count / 1000000).toLocaleString() + "M";
   }
-  return text
+  return text;
 }
 
 /**
@@ -322,44 +396,52 @@ function badgeCountText(count) {
  */
 function getWaybackCount(url, onSuccess, onFail) {
   if (isValidUrl(url) && isNotExcludedUrl(url)) {
-    const requestUrl = hostURL + '__wb/sparkline'
-    const requestParams = '?collection=web&output=json&url=' + fixedEncodeURIComponent(url)
+    const requestUrl = hostURL + "__wb/sparkline";
+    const requestParams =
+      "?collection=web&output=json&url=" + fixedEncodeURIComponent(url);
     const timeoutPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
-        reject(new Error('timeout'))
-      }, 30000)
+        reject(new Error("timeout"));
+      }, 30000);
       fetch(requestUrl + requestParams, {
-        method: 'GET',
-        headers: hostHeaders
-      })
-      .then(resolve, reject)
-    })
+        method: "GET",
+        headers: hostHeaders,
+      }).then(resolve, reject);
+    });
     return timeoutPromise
-    .then(response => response.json())
-    .then(json => {
-      const years = json.years
-      let total = 0
-      if (isObject(years)) {
-        for (let y in years) {
-          for (let c of years[y]) {
-            total += c
+      .then((response) => response.json())
+      .then((json) => {
+        const years = json.years;
+        let total = 0;
+        if (isObject(years)) {
+          for (let y in years) {
+            for (let c of years[y]) {
+              total += c;
+            }
           }
         }
-      }
-      // set total to special value if URL is excluded from viewing
-      if (json.error && json.error.type && (json.error.type === 'blocked')) {
-        total = -1
-      }
-      let values = { total: total, first_ts: json.first_ts, last_ts: json.last_ts }
-      onSuccess(values)
-    })
-    .catch(error => {
-      console.log('getWaybackCount FAILED: ', error)
-      if (onFail) { onFail(error) }
-    })
+        // set total to special value if URL is excluded from viewing
+        if (json.error && json.error.type && json.error.type === "blocked") {
+          total = -1;
+        }
+        let values = {
+          total: total,
+          first_ts: json.first_ts,
+          last_ts: json.last_ts,
+        };
+        onSuccess(values);
+      })
+      .catch((error) => {
+        console.log("getWaybackCount FAILED: ", error);
+        if (onFail) {
+          onFail(error);
+        }
+      });
   } else {
-    console.log('getWaybackCount: not a valid URL')
-    if (onFail) { onFail(null) }
+    console.log("getWaybackCount: not a valid URL");
+    if (onFail) {
+      onFail(null);
+    }
   }
 }
 
@@ -367,26 +449,26 @@ function getWaybackCount(url, onSuccess, onFail) {
  * Checks Wayback Machine API for url snapshot
  */
 function wmAvailabilityCheck(url, onsuccess, onfail) {
-  const requestUrl = hostURL + 'wayback/available'
-  const requestParams = '?url=' + fixedEncodeURIComponent(url)
+  const requestUrl = hostURL + "wayback/available";
+  const requestParams = "?url=" + fixedEncodeURIComponent(url);
   fetch(requestUrl + requestParams, {
-    method: 'GET',
-    headers: hostHeaders
+    method: "GET",
+    headers: hostHeaders,
   })
-  .then(response => response.json())
-  .then((json) => {
-    let wayback_url = getWaybackUrlFromResponse(json)
-    let timestamp = getWaybackTimestampFromResponse(json)
-    if (wayback_url !== null) {
-      onsuccess(wayback_url, url, timestamp)
-    } else if (onfail) {
-      onfail()
-    }
-  })
-  .catch((err) => {
-    // catch the error in case of api failure
-    console.log('wmAvailabilityCheck ERROR: ', err)
-  })
+    .then((response) => response.json())
+    .then((json) => {
+      let wayback_url = getWaybackUrlFromResponse(json);
+      let timestamp = getWaybackTimestampFromResponse(json);
+      if (wayback_url !== null) {
+        onsuccess(wayback_url, url, timestamp);
+      } else if (onfail) {
+        onfail();
+      }
+    })
+    .catch((err) => {
+      // catch the error in case of api failure
+      console.log("wmAvailabilityCheck ERROR: ", err);
+    });
 }
 
 /**
@@ -395,13 +477,15 @@ function wmAvailabilityCheck(url, onsuccess, onfail) {
  * @return {bool}
  */
 function isArchiveUrl(url) {
-  if (typeof url !== 'string') { return false }
+  if (typeof url !== "string") {
+    return false;
+  }
   try {
-    const hostname = new URL(url).hostname
-    return (hostname === 'web.archive.org')
+    const hostname = new URL(url).hostname;
+    return hostname === "web.archive.org";
   } catch (e) {
     // url not formated correctly
-    return false
+    return false;
   }
 }
 
@@ -411,8 +495,10 @@ function isArchiveUrl(url) {
  * @return {bool}
  */
 function isValidUrl(url) {
-  return ((typeof url) === 'string' &&
-    (url.indexOf('http://') === 0 || url.indexOf('https://') === 0))
+  return (
+    typeof url === "string" &&
+    (url.indexOf("http://") === 0 || url.indexOf("https://") === 0)
+  );
 }
 
 /**
@@ -421,80 +507,90 @@ function isValidUrl(url) {
  * @return {string} or null
  */
 function makeValidURL(url) {
-  return isValidUrl(url) ? url : (url.includes('.') ? 'https://' + url : null)
+  return isValidUrl(url) ? url : url.includes(".") ? "https://" + url : null;
 }
 
 // Returns substring of URL after :// not including "www." if present.
 // Also crops trailing slash.
 // Returns null if match not found, or if url is not a string.
 function cropPrefix(url) {
-  if (typeof url === 'string') {
-    if (url.slice(-1) === '/') { url = url.slice(0, -1) }
-    let re = /^(?:[a-z]+:\/\/)?(?:www\.)?(.*)$/
-    let match = re.exec(url)
-    return match[1]
+  if (typeof url === "string") {
+    if (url.slice(-1) === "/") {
+      url = url.slice(0, -1);
+    }
+    let re = /^(?:[a-z]+:\/\/)?(?:www\.)?(.*)$/;
+    let match = re.exec(url);
+    return match[1];
   }
-  return null
+  return null;
 }
 
 // Returns substring of url after :// only, or null if url is not a string.
 function cropScheme(url) {
-  if (typeof url === 'string') {
-    let re = /^(?:[a-z]+:\/\/)?(.*)$/
-    let match = re.exec(url)
-    return match[1]
+  if (typeof url === "string") {
+    let re = /^(?:[a-z]+:\/\/)?(.*)$/;
+    let match = re.exec(url);
+    return match[1];
   }
-  return null
+  return null;
 }
 
 // Function to check whether it is a valid URL or not.
 // Returns: true = good, false = excluded URL.
 function isNotExcludedUrl(url) {
-  if (typeof url !== 'string') { return false }
-  if (url.trim() === '') { return false }
+  if (typeof url !== "string") {
+    return false;
+  }
+  if (url.trim() === "") {
+    return false;
+  }
   for (const exUrl of excluded_urls) {
-    if (url.startsWith(exUrl) || url.startsWith('http://' + exUrl) || url.startsWith('https://' + exUrl)) {
-      return false
+    if (
+      url.startsWith(exUrl) ||
+      url.startsWith("http://" + exUrl) ||
+      url.startsWith("https://" + exUrl)
+    ) {
+      return false;
     }
   }
-  return true
+  return true;
 }
 
 function remove_port(url) {
-  if (url.substr(-4) === ':80/') {
-    url = url.substring(0, url.length - 4)
+  if (url.substr(-4) === ":80/") {
+    url = url.substring(0, url.length - 4);
   }
-  return url
+  return url;
 }
 
 function remove_wbm(url) {
-  let pos = url.indexOf('/http')
-  let new_url = ''
+  let pos = url.indexOf("/http");
+  let new_url = "";
   if (pos !== -1) {
-    new_url = url.substring(pos + 1)
+    new_url = url.substring(pos + 1);
   } else {
-    pos = url.indexOf('/www')
-    new_url = url.substring(pos + 1)
+    pos = url.indexOf("/www");
+    new_url = url.substring(pos + 1);
   }
-  return remove_port(new_url)
+  return remove_port(new_url);
 }
 
 /**
-* Extracts URL from web.archive.org or extension page, otherwise the url passed in.
-* @param url {string}
-* @return {string}
-*/
+ * Extracts URL from web.archive.org or extension page, otherwise the url passed in.
+ * @param url {string}
+ * @return {string}
+ */
 function getCleanUrl(url) {
-  let rurl = url || ''
-  if (rurl.includes('extension:')) {
+  let rurl = url || "";
+  if (rurl.includes("extension:")) {
     // return url param from extension page
-    const url_param = new URL(url)
-    rurl = url_param.searchParams.get('url')
-  } else if (rurl.includes('web.archive.org')) {
+    const url_param = new URL(url);
+    rurl = url_param.searchParams.get("url");
+  } else if (rurl.includes("web.archive.org")) {
     // return url from archive.org page
-    rurl = remove_wbm(url)
+    rurl = remove_wbm(url);
   }
-  return rurl
+  return rurl;
 }
 
 /**
@@ -503,16 +599,19 @@ function getCleanUrl(url) {
  * @return {string or null}
  */
 function getWaybackUrlFromResponse(json) {
-  if (json && json.archived_snapshots &&
+  if (
+    json &&
+    json.archived_snapshots &&
     json.archived_snapshots.closest &&
     json.archived_snapshots.closest.available &&
     json.archived_snapshots.closest.available === true &&
-    json.archived_snapshots.closest.status.indexOf('2') === 0 &&
-    isValidUrl(json.archived_snapshots.closest.url)) {
+    json.archived_snapshots.closest.status.indexOf("2") === 0 &&
+    isValidUrl(json.archived_snapshots.closest.url)
+  ) {
     // not sure why we're replacing http: with https: here
-    return json.archived_snapshots.closest.url.replace(/^http:/, 'https:')
+    return json.archived_snapshots.closest.url.replace(/^http:/, "https:");
   } else {
-    return null
+    return null;
   }
 }
 
@@ -522,15 +621,18 @@ function getWaybackUrlFromResponse(json) {
  * @return {string or null} as "yyyyMMddHHmmss"
  */
 function getWaybackTimestampFromResponse(json) {
-  if (json && json.archived_snapshots &&
+  if (
+    json &&
+    json.archived_snapshots &&
     json.archived_snapshots.closest &&
     json.archived_snapshots.closest.available &&
     json.archived_snapshots.closest.available === true &&
-    json.archived_snapshots.closest.status.indexOf('2') === 0 &&
-    isValidUrl(json.archived_snapshots.closest.url)) {
-    return json.archived_snapshots.closest.timestamp
+    json.archived_snapshots.closest.status.indexOf("2") === 0 &&
+    isValidUrl(json.archived_snapshots.closest.url)
+  ) {
+    return json.archived_snapshots.closest.timestamp;
   } else {
-    return null
+    return null;
   }
 }
 
@@ -540,19 +642,23 @@ function getWaybackTimestampFromResponse(json) {
  * @return {Date or null}
  */
 function timestampToDate(timestamp) {
-  let date = null
+  let date = null;
   if (timestamp && timestamp.length >= 4) {
-    date = new Date(Date.UTC(
-      Number(timestamp.substring(0, 4)), // year
-      (Number(timestamp.substring(4, 6)) || 1) - 1, // month
-      (Number(timestamp.substring(6, 8)) || 1), // day
-      Number(timestamp.substring(8, 10)), // hours
-      Number(timestamp.substring(10, 12)), // min
-      Number(timestamp.substring(12, 14)) // sec
-    ))
-    if (isNaN(date)) { return null }
+    date = new Date(
+      Date.UTC(
+        Number(timestamp.substring(0, 4)), // year
+        (Number(timestamp.substring(4, 6)) || 1) - 1, // month
+        Number(timestamp.substring(6, 8)) || 1, // day
+        Number(timestamp.substring(8, 10)), // hours
+        Number(timestamp.substring(10, 12)), // min
+        Number(timestamp.substring(12, 14)), // sec
+      ),
+    );
+    if (isNaN(date)) {
+      return null;
+    }
   }
-  return date
+  return date;
 }
 
 /**
@@ -561,20 +667,20 @@ function timestampToDate(timestamp) {
  * @return timestamp {string} as "yyyyMMddHHmmss" in UTC time zone, or null.
  */
 function dateToTimestamp(date) {
-  let timestamp = null
+  let timestamp = null;
   function pad(num) {
-    return (num < 10) ? ('0' + num) : ('' + num)
+    return num < 10 ? "0" + num : "" + num;
   }
   if (date instanceof Date) {
-    let yyyy = date.getUTCFullYear()
-    let MM = date.getUTCMonth() + 1
-    let dd = date.getUTCDate()
-    let HH = date.getUTCHours()
-    let mm = date.getUTCMinutes()
-    let ss = date.getUTCSeconds()
-    timestamp = yyyy + pad(MM) + pad(dd) + pad(HH) + pad(mm) + pad(ss)
+    let yyyy = date.getUTCFullYear();
+    let MM = date.getUTCMonth() + 1;
+    let dd = date.getUTCDate();
+    let HH = date.getUTCHours();
+    let mm = date.getUTCMinutes();
+    let ss = date.getUTCSeconds();
+    timestamp = yyyy + pad(MM) + pad(dd) + pad(HH) + pad(mm) + pad(ss);
   }
-  return timestamp
+  return timestamp;
 }
 
 /**
@@ -583,22 +689,29 @@ function dateToTimestamp(date) {
  * @return string or ''
  */
 function viewableTimestamp(timestamp) {
-  let date = timestampToDate(timestamp)
-  let text = ''
+  let date = timestampToDate(timestamp);
+  let text = "";
   if (date) {
-    if ((Date.now() - date.getTime()) > 86400000) {
+    if (Date.now() - date.getTime() > 86400000) {
       // over 24 hours
-      text = date.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' }) // e.g.'Mar 5, 2021'
+      text = date.toLocaleDateString([], {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }); // e.g.'Mar 5, 2021'
     } else {
       // under 24 hours
-      text = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) // e.g.'7:00 PM'
+      text = date.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit",
+      }); // e.g.'7:00 PM'
     }
   }
-  return text
+  return text;
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -609,16 +722,25 @@ function sleep(ms) {
  * @return {bool}: true if matches, false if doesn't.
  */
 function matchWildcard(text, pattern) {
-  if ((pattern.length === 0) && (text.length === 0)) { return true }
-  if ((pattern.length === 1) && (pattern[0] === '*')) { return true }
-  if ((pattern.length > 1) && (pattern[0] === '*') && (text.length === 0)) { return false }
-  if ((pattern.length > 0) && (text.length > 0) && (pattern[0] === text[0])) {
-    return matchWildcard(text.substring(1), pattern.substring(1))
+  if (pattern.length === 0 && text.length === 0) {
+    return true;
   }
-  if ((pattern.length > 0) && (pattern[0] === '*')) {
-    return matchWildcard(text, pattern.substring(1)) || matchWildcard(text.substring(1), pattern)
+  if (pattern.length === 1 && pattern[0] === "*") {
+    return true;
   }
-  return false
+  if (pattern.length > 1 && pattern[0] === "*" && text.length === 0) {
+    return false;
+  }
+  if (pattern.length > 0 && text.length > 0 && pattern[0] === text[0]) {
+    return matchWildcard(text.substring(1), pattern.substring(1));
+  }
+  if (pattern.length > 0 && pattern[0] === "*") {
+    return (
+      matchWildcard(text, pattern.substring(1)) ||
+      matchWildcard(text.substring(1), pattern)
+    );
+  }
+  return false;
 }
 
 /**
@@ -628,9 +750,9 @@ function matchWildcard(text, pattern) {
  * @returns {bool}: true if URL matches any pattern in the list.
  */
 function isUrlInList(url, patterns) {
-  const curl = cropPrefix(url)
-  const matched = patterns.some(pat => matchWildcard(curl, pat))
-  return matched
+  const curl = cropPrefix(url);
+  const matched = patterns.some((pat) => matchWildcard(curl, pat));
+  return matched;
 }
 
 /**
@@ -639,41 +761,53 @@ function isUrlInList(url, patterns) {
  * @return {string}
  */
 function getErrorMessage(req) {
-  return 'The requested service ' + req.url + ' failed: ' + req.status + ', ' + req.statusText
+  return (
+    "The requested service " +
+    req.url +
+    " failed: " +
+    req.status +
+    ", " +
+    req.statusText
+  );
 }
 
 function getUrlByParameter(name) {
-  const url = new URL(window.location.href)
-  return url.searchParams.get(name)
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
 }
 
 function openByWindowSetting(url, op = null, cb) {
   if (op === null) {
-    chrome.storage.local.get(['view_setting'], (settings) => {
-      checkLastError()
-      if (settings) { // OK if view_setting undefined
-        opener(url, settings.view_setting, cb)
+    chrome.storage.local.get(["view_setting"], (settings) => {
+      checkLastError();
+      if (settings) {
+        // OK if view_setting undefined
+        opener(url, settings.view_setting, cb);
       }
-    })
+    });
   } else {
-    opener(url, op, cb)
+    opener(url, op, cb);
   }
 }
 
 function opener(url, option, callback) {
-  if (option === 'tab' || option === undefined) {
+  if (option === "tab" || option === undefined) {
     chrome.tabs.create({ url: url }, (tab) => {
-      if (callback) { callback(tab.id) }
-    })
-  } else if (option === 'replace') {
+      if (callback) {
+        callback(tab.id);
+      }
+    });
+  } else if (option === "replace") {
     // Back button may not work due to a bug in Chrome, but works fine in Firefox.
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs && tabs[0]) {
         chrome.tabs.update(tabs[0].id, { active: true, url: url }, (tab) => {
-          if (callback) { callback(tab.id) }
-        })
+          if (callback) {
+            callback(tab.id);
+          }
+        });
       }
-    })
+    });
   } else {
     chrome.windows.getCurrent({ populate: true }, (window) => {
       // Access window properties
@@ -681,17 +815,23 @@ function opener(url, option, callback) {
       let w = window.height;
       if (w > h) {
         // landscape screen
-        const maxW = 1200
-        w = Math.floor(((w > maxW) ? maxW : w) * 0.666)
-        h = Math.floor(w * 0.75)
-      } else { // option === 'window'
+        const maxW = 1200;
+        w = Math.floor((w > maxW ? maxW : w) * 0.666);
+        h = Math.floor(w * 0.75);
+      } else {
+        // option === 'window'
         // portrait screen (likely mobile)
-        w = Math.floor(w * 0.9)
-        h = Math.floor(h * 0.9)
+        w = Math.floor(w * 0.9);
+        h = Math.floor(h * 0.9);
       }
-      chrome.windows.create({ url: url, width: w, height: h, type: 'popup' }, (window) => {
-        if (callback) { callback(window.tabs[0].id) }
-      })
+      chrome.windows.create(
+        { url: url, width: w, height: h, type: "popup" },
+        (window) => {
+          if (callback) {
+            callback(window.tabs[0].id);
+          }
+        },
+      );
     });
   }
 }
@@ -702,17 +842,17 @@ function opener(url, option, callback) {
 //
 function notifyMsg(msg, callback) {
   if (chrome.notifications) {
-    chrome.storage.local.get(['notify_setting'], (settings) => {
+    chrome.storage.local.get(["notify_setting"], (settings) => {
       if (settings && !settings.notify_setting) {
         const options = {
-          type: 'basic',
-          title: 'Wayback Machine',
+          type: "basic",
+          title: "Wayback Machine",
           message: msg,
-          iconUrl: chrome.runtime.getURL('images/app-icon/app-icon96.png')
-        }
-        chrome.notifications.create(options, callback)
+          iconUrl: chrome.runtime.getURL("images/app-icon/app-icon96.png"),
+        };
+        chrome.notifications.create(options, callback);
       }
-    })
+    });
   }
 }
 
@@ -722,15 +862,19 @@ function notifyMsg(msg, callback) {
 //   Safari: Ignores alert()
 //
 function alertMsg(msg) {
-  if (isFirefox) { notifyMsg(msg) } else { alert(msg) }
+  if (isFirefox) {
+    notifyMsg(msg);
+  } else {
+    alert(msg);
+  }
 }
 
 function checkLastError() {
   if (chrome.runtime.lastError) {
-    if (chrome.runtime.lastError.message.startsWith('No tab with id:')) {
+    if (chrome.runtime.lastError.message.startsWith("No tab with id:")) {
       // Skip
     } else {
-      console.log('checkLastError: ', chrome.runtime.lastError.message)
+      console.log("checkLastError: ", chrome.runtime.lastError.message);
       // console.trace() // uncomment while debugging
     }
   } else {
@@ -738,89 +882,111 @@ function checkLastError() {
   }
 }
 
-function attachTooltip (anchor, tooltip, pos = 'right', time = 200) {
+function attachTooltip(anchor, tooltip, pos = "right", time = 200) {
   // Modified code from https://embed.plnkr.co/plunk/HLqrJ6 to get tooltip to stay
-  return anchor.attr({
-    'data-toggle': 'tooltip',
-    'title': tooltip
-  })
-  .tooltip({
-    animated: false,
-    placement: `${pos} auto`,
-    html: true,
-    trigger: 'manual'
-  })
-  // Handles staying open
-  .on('mouseenter click', () => {
-    $(anchor).tooltip('show')
-    $('.popup_box').on('mouseleave', () => {
-      setTimeout(() => {
-        if (!$(`.${anchor.attr('class')}[href*="${anchor.attr('href')}"]:hover`).length) {
-          $(anchor).tooltip('hide')
-        }
-      }, time)
-    })
-  })
-  .on('mouseleave blur', () => {
-    setTimeout(() => {
-      if (!$('.popup_box:hover').length) {
-        $(anchor).tooltip('hide')
-      }
-    }, time)
-  })
+  return (
+    anchor
+      .attr({
+        "data-toggle": "tooltip",
+        title: tooltip,
+      })
+      .tooltip({
+        animated: false,
+        placement: `${pos} auto`,
+        html: true,
+        trigger: "manual",
+      })
+      // Handles staying open
+      .on("mouseenter click", () => {
+        $(anchor).tooltip("show");
+        $(".popup_box").on("mouseleave", () => {
+          setTimeout(() => {
+            if (
+              !$(
+                `.${anchor.attr("class")}[href*="${anchor.attr("href")}"]:hover`,
+              ).length
+            ) {
+              $(anchor).tooltip("hide");
+            }
+          }, time);
+        });
+      })
+      .on("mouseleave blur", () => {
+        setTimeout(() => {
+          if (!$(".popup_box:hover").length) {
+            $(anchor).tooltip("hide");
+          }
+        }, time);
+      })
+  );
 }
 
 // Saves the defaultAutoExcludeList[] to storage if 'auto_exclude_list' hasn't been set.
 function initAutoExcludeList() {
-  chrome.storage.local.get(['auto_exclude_list'], (items) => {
-    if (('auto_exclude_list' in items) === false) {
-      chrome.storage.local.set({ 'auto_exclude_list': defaultAutoExcludeList })
+  chrome.storage.local.get(["auto_exclude_list"], (items) => {
+    if ("auto_exclude_list" in items === false) {
+      chrome.storage.local.set({ auto_exclude_list: defaultAutoExcludeList });
     }
-  })
+  });
 }
 
 function setupContextMenus(enabled) {
   chrome.contextMenus.removeAll(() => {
     if (enabled) {
-      chrome.contextMenus.create({
-        'id': 'save',
-        'title': 'Save Page Now',
-        'contexts': ['page', 'frame', 'link'],
-        'documentUrlPatterns': ['*://*/*', 'ftp://*/*']
-      }, checkLastError)
-      chrome.contextMenus.create({
-        'id': 'first',
-        'title': 'Oldest Version',
-        'contexts': ['page', 'frame', 'link'],
-        'documentUrlPatterns': ['*://*/*', 'ftp://*/*']
-      }, checkLastError)
-      chrome.contextMenus.create({
-        'id': 'recent',
-        'title': 'Newest Version',
-        'contexts': ['page', 'frame', 'link'],
-        'documentUrlPatterns': ['*://*/*', 'ftp://*/*']
-      }, checkLastError)
-      chrome.contextMenus.create({
-        'id': 'all',
-        'title': 'All Versions',
-        'contexts': ['page', 'frame', 'link'],
-        'documentUrlPatterns': ['*://*/*', 'ftp://*/*']
-      }, checkLastError)
+      chrome.contextMenus.create(
+        {
+          id: "save",
+          title: "Save Page Now",
+          contexts: ["page", "frame", "link"],
+          documentUrlPatterns: ["*://*/*", "ftp://*/*"],
+        },
+        checkLastError,
+      );
+      chrome.contextMenus.create(
+        {
+          id: "first",
+          title: "Oldest Version",
+          contexts: ["page", "frame", "link"],
+          documentUrlPatterns: ["*://*/*", "ftp://*/*"],
+        },
+        checkLastError,
+      );
+      chrome.contextMenus.create(
+        {
+          id: "recent",
+          title: "Newest Version",
+          contexts: ["page", "frame", "link"],
+          documentUrlPatterns: ["*://*/*", "ftp://*/*"],
+        },
+        checkLastError,
+      );
+      chrome.contextMenus.create(
+        {
+          id: "all",
+          title: "All Versions",
+          contexts: ["page", "frame", "link"],
+          documentUrlPatterns: ["*://*/*", "ftp://*/*"],
+        },
+        checkLastError,
+      );
     } else {
-      chrome.contextMenus.create({
-        'id': 'welcome',
-        'title': 'Welcome to the Wayback Machine',
-        'contexts': ['page', 'frame', 'link'],
-        'documentUrlPatterns': ['*://*/*', 'ftp://*/*']
-      }, checkLastError)
+      chrome.contextMenus.create(
+        {
+          id: "welcome",
+          title: "Welcome to the Wayback Machine",
+          contexts: ["page", "frame", "link"],
+          documentUrlPatterns: ["*://*/*", "ftp://*/*"],
+        },
+        checkLastError,
+      );
     }
-  })
+  });
 }
 
 // Default Settings prior to accepting terms.
-function initDefaultOptions () {
+function initDefaultOptions() {
   chrome.storage.session.set({
-    waybackCountCache: {}
+    waybackCountCache: {},
   });
   chrome.storage.local.set({
     agreement: false, // needed for firefox
@@ -836,29 +1002,32 @@ function initDefaultOptions () {
     amazon_setting: false,
     tvnews_setting: false,
     auto_archive_setting: false,
-    auto_archive_age: '99999',
+    auto_archive_age: "99999",
     fact_check_setting: false,
     /* General */
     resource_list_setting: false,
     email_outlinks_setting: false,
     my_archive_setting: false,
-    view_setting: 'tab',
-    show_settings_tab_tip: true
-  })
+    view_setting: "tab",
+    show_settings_tab_tip: true,
+  });
 }
 
 // Turn on these Settings and toolbar popup after accepting terms.
-function afterAcceptTerms () {
+function afterAcceptTerms() {
   chrome.storage.local.set({
     agreement: true,
     private_mode_setting: false,
-    not_found_setting: true
-  })
-  chrome.action.setPopup({ popup: chrome.runtime.getURL('index.html') }, checkLastError)
-  setupContextMenus(true)
+    not_found_setting: true,
+  });
+  chrome.action.setPopup(
+    { popup: chrome.runtime.getURL("index.html") },
+    checkLastError,
+  );
+  setupContextMenus(true);
 }
 
-if (typeof module !== 'undefined') {
+if (typeof module !== "undefined") {
   module.exports = {
     isArray,
     isObject,
@@ -908,6 +1077,6 @@ if (typeof module !== 'undefined') {
     newshosts,
     fixedEncodeURIComponent,
     isInTestEnv,
-    checkLastError
-  }
+    checkLastError,
+  };
 }
